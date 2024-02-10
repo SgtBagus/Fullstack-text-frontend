@@ -6,12 +6,12 @@ import Button from '../../Components/Button';
 
 import { AuthContext } from "../../Context/AuthContext";
 
-import { MENU_LIST } from '../config';
+import { ROLE_LIST, MENU_LIST_ADMIN, MENU_LIST_SALES } from '../config';
 
 import { getLogout } from "../../Data/Auth/Logout";
 
 export const SidebarComponents = ({ path: currentPath }) => {
-    const { currentUser: { name, email, token  } } = useContext(AuthContext);
+    const { currentUser: { name, email, image, role, token } } = useContext(AuthContext);
 
     const navigate = useNavigate();
     const handelNavigate = (path) => {
@@ -22,6 +22,8 @@ export const SidebarComponents = ({ path: currentPath }) => {
         await getLogout(token);
     };
 
+    const MENU_LIST_CONFIG = role === ROLE_LIST.ADMIN ? MENU_LIST_ADMIN : MENU_LIST_SALES;
+
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             <div className="brand-link">
@@ -31,20 +33,20 @@ export const SidebarComponents = ({ path: currentPath }) => {
             <div className="sidebar">
                 <div className="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
                     <div className="image">
-                        <img src="https://pbs.twimg.com/media/FSq_ZNUXEAEHwFJ?format=jpg&name=large" className="img-circle elevation-2" alt="User" style={{ width: '50px', height: '50px' }}/>
+                        <img src={image} className="img-circle elevation-2" alt="User" style={{ width: '50px', height: '50px' }}/>
                     </div>
                     <div className="info">
                         <div style={{ color: '#c2c7d0' }}>
                             {name}
                             <br />
-                            <small>{email} - Admin</small>
+                            <small>{email} - {role}</small>
                         </div>
                     </div>
                 </div>
                 <nav className="mt-2">
                     <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
                         {
-                            MENU_LIST.map(({id, menuName, path, icon }) => (
+                            MENU_LIST_CONFIG.map(({id, menuName, path, icon, role: roleMenu }) => (
                                 <li className="nav-item" key={id}>
                                     <div
                                         className={`nav-link ${currentPath === path && 'active'}`}

@@ -36,9 +36,9 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const { user: { id, name, email } , token }  = await getLogin(form);
+      const { user: { id, name, image, role, email } , token }  = await getLogin(form);
 
-			const currentUser = { id, name, email, token };
+			const currentUser = { id, name, email, image, role, token };
 
 			await localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
