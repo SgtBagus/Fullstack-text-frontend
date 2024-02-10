@@ -1,28 +1,46 @@
-import { Route, Routes } from "react-router-dom";
+import { useContext } from "react";
+import { Route, Routes, Navigate } from "react-router-dom";
+
+import { AuthContext } from "../Context/AuthContext";
 
 import { LayoutDefault } from "../Layouts";
 
 import Login from "../Pages/Auth/Login";
 import Dashboard from "../Pages/Dashboard";
 
-const RenderDefaultLayout = (page, pageName, path) => (
-    <LayoutDefault pageName={pageName} path={path} >
+const RoutesComponents = () => {
+  const { currentUser, isLoading } = useContext(AuthContext);
+
+  const ProtectedRoute = ({ children }) => {
+    if (!isLoading) {
+      if (!currentUser) {
+        return <Navigate to="/login" />;
+      }
+    }
+
+    return children;
+  };
+
+  const RenderDefaultLayout = (page, pageName, path) => (
+    <LayoutDefault pageName={pageName} path={path}>
       {page}
     </LayoutDefault>
-  )
+  );
 
-const RoutesComponents = () => {
-    return (
-        <Routes>
-            <Route
-                path="/"
-                element={RenderDefaultLayout(<Dashboard />, "Dashboard", "/")}
-            />
-            <Route exact path="/" element={<Dashboard />} />
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            {RenderDefaultLayout(<Dashboard />, "Dashboard", "/")}
+          </ProtectedRoute>
+        }
+      />
 
-            <Route exact path="/Login" element={<Login />} />
-        </Routes>
-    );
+      <Route exact path="/Login" element={<Login />} />
+    </Routes>
+  );
 };
 
 export default RoutesComponents;

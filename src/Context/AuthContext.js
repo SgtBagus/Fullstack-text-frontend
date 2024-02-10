@@ -1,38 +1,23 @@
-import { createContext, useReducer } from "react";
+import { useEffect, useState, createContext } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const INITIAL_STATE = null;
-
-  const SET_CURRENT_USER = (state, action) => {
-      const { currentUser, typeSwtich } = action;
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem("currentUser")));
+  const [isLoading, setIsLoading] = useState(false);
   
-      switch (typeSwtich) {
-          case "SET_USER":
-              const buttonMaping = currentUser.map(({
-                  type = 'button',
-                  className = 'btn btn-primary',
-                  onClick = () => {},
-                  buttonText = 'Button',
-                  iconButton = null,
-                  disabled = false,
-                  style = null,
-                  customButton = null,
-              }) => ({
-                  type, className, onClick, buttonText, iconButton, disabled, style, customButton,
-              }))
+  useEffect(() => {
+    if(currentUser) {
+      setIsLoading(false);
+    } else {
+      setCurrentUser(null);
+    }
 
-              return buttonMaping;
-          default:
-              return state;
-      }
-  };
-
-  const [state, dispatch] = useReducer(SET_CURRENT_USER, INITIAL_STATE);
+    return () => {};
+  }, [currentUser]);
 
   return (
-    <AuthContext.Provider value={{ currentUser:state, dispatch }}>
+    <AuthContext.Provider value={{ currentUser, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

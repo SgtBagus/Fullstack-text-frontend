@@ -1,17 +1,26 @@
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '../../Components/Button';
 
+import { AuthContext } from "../../Context/AuthContext";
+
 import { MENU_LIST } from '../config';
 
+import { getLogout } from "../../Data/Auth/Logout";
+
 export const SidebarComponents = ({ path: currentPath }) => {
+    const { currentUser: { name, email, token  } } = useContext(AuthContext);
 
     const navigate = useNavigate();
     const handelNavigate = (path) => {
         return navigate(path);
     }
+
+    const logoutHanlder = async () => {
+        await getLogout(token);
+    };
 
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -22,13 +31,13 @@ export const SidebarComponents = ({ path: currentPath }) => {
             <div className="sidebar">
                 <div className="user-panel mt-3 pb-3 mb-3 d-flex align-items-center">
                     <div className="image">
-                        <img src="https://wallpaperwaifu.com/wp-content/uploads/2023/03/hayase-yuuka-sportswear-blue-archive-thumb.jpg" className="img-circle elevation-2" alt="User" style={{ width: '50px', height: '50px' }}/>
+                        <img src="https://pbs.twimg.com/media/FSq_ZNUXEAEHwFJ?format=jpg&name=large" className="img-circle elevation-2" alt="User" style={{ width: '50px', height: '50px' }}/>
                     </div>
                     <div className="info">
                         <div style={{ color: '#c2c7d0' }}>
-                            Nama nya disini !
+                            {name}
                             <br />
-                            <small>Email Login nya disini</small>
+                            <small>{email} - Admin</small>
                         </div>
                     </div>
                 </div>
@@ -52,7 +61,7 @@ export const SidebarComponents = ({ path: currentPath }) => {
                             <Button                                         
                                 className="btn btn-danger btn-block my-2" 
                                 label="Logout"
-                                onClick={() => {}}
+                                onClick={() => logoutHanlder()}
                                 buttonIcon="fas fa-sign-out-alt"
                             />
                         </li>
