@@ -1,28 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import update from "immutability-helper";
 import { NotificationManager } from "react-notifications";
 
 import InputText from "../../Components/Form/InputText";
 
-import { getLogin } from "../../Data/Auth/Login";
+import { LoadingContext } from "../../Context/LoadingContext";
 
 import { CATCH_ERROR } from "../../Helper/Error";
+import { API_BASE } from "../../Data/config/apiBase";
+import axios from "axios";
 
 const Login = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const { dispatchLoading } = useContext(LoadingContext);
+
   const navigate = useNavigate();
 
   const { email, password } = form;
 
-	useEffect(() => {
-    if(localStorage.getItem('currentUser')) {
-       navigate('/');
+  useEffect(() => {
+    if (localStorage.getItem("currentUser")) {
+      navigate("/");
     }
-	}, [navigate]);
+
+    dispatchLoading(false);
+  }, [dispatchLoading, navigate]);
 
   const changeInputHandler = async (type, val) => {
     const newForm = update(form, {
@@ -35,17 +41,23 @@ const Login = () => {
   const loginHandler = async (e) => {
     e.preventDefault();
 
-    try {
-      const { user: { id, name, image, role, email } , token }  = await getLogin(form);
+    const url = `${API_BASE}api/login`;
+    await axios.post(url, form).then((res) => {
+        const {
+          data: {
+            user: {
+              id, name, image, role, email
+            },
+            token,
+          },
+        } = res;
+        const currentUser = { id, name, email, image, role, token };
 
-			const currentUser = { id, name, email, image, role, token };
-
-			await localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
-			window.location.href = "/";
-    } catch (error) {
-      NotificationManager.warning(CATCH_ERROR(error), "Terjadi Kesalahan", 5000);
-    }
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        window.location.href = "/";
+      }).catch((error) => {
+        NotificationManager.warning(CATCH_ERROR(error), "Terjadi Kesalahan", 5000);
+    });
   };
 
   return (

@@ -8,7 +8,9 @@ import { AuthContext } from "../../Context/AuthContext";
 
 import { ROLE_LIST, MENU_LIST_ADMIN, MENU_LIST_SALES } from '../config';
 
-import { getLogout } from "../../Data/Auth/Logout";
+
+import { API_BASE } from '../../Data/config/apiBase';
+import axios from 'axios';
 
 export const SidebarComponents = ({ path: currentPath }) => {
     const { currentUser: { name, email, image, role, token } } = useContext(AuthContext);
@@ -19,7 +21,14 @@ export const SidebarComponents = ({ path: currentPath }) => {
     }
 
     const logoutHanlder = async () => {
-        await getLogout(token);
+        const url = `${API_BASE}api/logout`;
+
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+        await axios.post(url).then(() => {
+            localStorage.removeItem("currentUser");
+            
+            window.location.href = "/login";
+        });
     };
 
     const MENU_LIST_CONFIG = role === ROLE_LIST.ADMIN ? MENU_LIST_ADMIN : MENU_LIST_SALES;

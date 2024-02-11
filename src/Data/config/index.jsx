@@ -1,5 +1,6 @@
 
 import { API_BASE } from './apiBase';
+import { GET_CURRENT_USER } from './selectors';
 
 export const exceptionExtractError = (exception) => {
     if (!exception.Errors) return false;
@@ -16,6 +17,12 @@ const getQueryString = (params) => {
     return Object.keys(params)
         .map(k => `${esc(k)}=${esc(params[k])}`)
         .join('&');
+};
+
+const generateRequestHeaderAuthorization = () => {
+    const { token } = GET_CURRENT_USER();
+
+    return { Authorization: `Bearer ${token}` };
 };
 
 export const fetchApi = async (
@@ -47,7 +54,9 @@ export const fetchApi = async (
 
     const url = `${apiBase}${endPoint}${slashId}${qs}`;
     const mergedHeaders = {
-        'Content-Type': String(method).toLowerCase() === 'delete' ? 'application/x-www-form-urlencoded' : 'application/json',
+        ...generateRequestHeaderAuthorization(),
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
     };
 
     const response = await fetch(url, {

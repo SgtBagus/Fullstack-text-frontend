@@ -24,15 +24,9 @@ export const MENU_LIST_ADMIN = [
     },
     {
         id: 4,
-        menuName: 'Sales Users',
-        path: '/sales',
+        menuName: 'Users',
+        path: '/users',
         icon: 'nav-icon fas fa-users',
-    },
-    {
-        id: 5,
-        menuName: 'Admin User',
-        path: '/admin',
-        icon: 'nav-icon fas fa-user',
     },
 ];
 
