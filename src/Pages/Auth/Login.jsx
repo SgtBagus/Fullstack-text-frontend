@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import update from "immutability-helper";
 import { NotificationManager } from "react-notifications";
+import axios from "axios";
 
 import InputText from "../../Components/Form/InputText";
 
@@ -9,7 +10,6 @@ import { LoadingContext } from "../../Context/LoadingContext";
 
 import { CATCH_ERROR } from "../../Helper/Error";
 import { API_BASE } from "../../Data/config/apiBase";
-import axios from "axios";
 
 const Login = () => {
   const [form, setForm] = useState({

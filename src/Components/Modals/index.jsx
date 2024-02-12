@@ -6,7 +6,7 @@ const Modals = ({
     buttonLabel, idModal, typeModal, children, className, disabled,
     btnSubmitText, btnCancelText, btnSubmitHandel, btnCancelHandel,
     buttonIcon, buttonSubmitIcon, btnSubmitDisabled, style, modalLarge,
-    headerTitle, btnCancelId,
+    headerTitle, btnCancelId, onClick,
 }) => {
     return (
         <>
@@ -17,6 +17,7 @@ const Modals = ({
                 data-target={`#${idModal}`}
                 disabled={disabled}
                 style={style}
+                onClick={onClick}
             >
                 {
                     buttonIcon && (
@@ -105,6 +106,7 @@ Modals.propTypes = {
     disabled: PropTypes.bool,
     style: PropTypes.shape(),
     modalLarge: PropTypes.bool,
+    onClick: PropTypes.func,
 };
 
 Modals.defaultProps = {    
@@ -125,6 +127,7 @@ Modals.defaultProps = {
     disabled: false,
     style: {},
     modalLarge: false,
+    onClick: () => {},
 };
 
 export default Modals;

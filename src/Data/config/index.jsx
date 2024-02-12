@@ -29,6 +29,7 @@ export const fetchApi = async (
     endPoint,
     payload = {},
     method = 'get',
+    option,
 ) => {
     let qs = '';
     let body;
@@ -65,6 +66,7 @@ export const fetchApi = async (
         body,
     });
 
+
   if (!response.ok) {
     let errMsg = response.statusText;
     const responseBody = await response.json();
@@ -81,6 +83,12 @@ export const fetchApi = async (
             if (Object.hasOwnProperty.call(responseBody, 'message')) {
                 errMsg = responseBody.message;
             }
+        }
+
+        if (responseBody.message === "Unauthenticated.") {
+            localStorage.removeItem("currentUser");
+
+            window.location.href = "/login";
         }
     }
 

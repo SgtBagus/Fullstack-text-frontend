@@ -2,7 +2,7 @@ import { isEmail } from 'validator';
 
 export const validateEmail = email => isEmail(email);
 
-export const GENERATE_ERROR_MESSAGE = (key, type, customText = null) => {
+export const GENERATE_ERROR_MESSAGE = (key, type, length = null) => {
     const errorType = [
         {
             type: 'valueMissing',
@@ -10,12 +10,12 @@ export const GENERATE_ERROR_MESSAGE = (key, type, customText = null) => {
         },
         {
             type: 'emailInvalid',
-            text: `Patikan Format ${key} Benar`,
+            text: `Pastikan Format ${key} Benar`,
         },
         {
-            type: 'customText',
-            text: customText,
-        }
+            type: 'notInValidLength',
+            text: `${key} harus memiliki ${length} karakter`,
+        },
     ];
 
     const errorCode = errorType.find(x => x.type === type);

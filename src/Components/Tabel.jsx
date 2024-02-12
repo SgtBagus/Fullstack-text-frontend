@@ -6,7 +6,7 @@ import { CapitalizeFirstLetter } from '../Helper/helper';
 const RenderActionButton = (actionButton, data) => {
     const {
         view: { enabled: enabledView, onClick: onClickView },
-        edit: { enabled: enabledEdit, onClick: onClickEdit },
+        edit: { enabled: enabledEdit, onClick: onClickEdit, customModal },
         delete: { enabled: enabledDelete, onClick: onClickDelete },
     } = actionButton;
 
@@ -19,6 +19,9 @@ const RenderActionButton = (actionButton, data) => {
                             <i className="fas fa-eye fa-xs" />
                         </button>
                     )
+                }
+                {
+                    customModal && (customModal(data))
                 }
                 {
                     enabledEdit && (
@@ -128,6 +131,7 @@ Tabel.propTypes = {
         edit: PropTypes.shape({
             enabled: PropTypes.bool,
             onClick: PropTypes.func,
+            customModal: PropTypes.func,
         }),
         delete: PropTypes.shape({
             enabled: PropTypes.bool,

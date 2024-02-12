@@ -52,7 +52,7 @@ const renderPlaceHolder = (isNew, value, placeHolder) => {
 }
 
 const InputFile = ({
-    value, changeEvent, placeHolder, style,
+    value, changeEvent, placeHolder, style, idPrewiev
 }) => {
     const { valueSrcRender, isNew } = srcImageRender(value);
 
@@ -74,7 +74,7 @@ const InputFile = ({
                 <input
                     type="file"
                     className="custom-file-input"
-                    id="exampleInputFile"
+                    id={idPrewiev}
                     onChange={(e) => {
                         try {
                             changeEvent(e.target.files[0])
@@ -83,7 +83,7 @@ const InputFile = ({
                         }
                     }}
                 />
-                <label className="custom-file-label" htmlFor="exampleInputFile">
+                <label className="custom-file-label" htmlFor={idPrewiev}>
                     {renderPlaceHolder(isNew, value, placeHolder)}
                 </label>
             </div>
@@ -102,12 +102,14 @@ InputFile.propTypes = {
     ]),
     changeEvent: PropTypes.func.isRequired,
     style: PropTypes.shape({}),
+    idPrewiev: PropTypes.string,
 };
 
 InputFile.defaultProps = {
     value: null,
     placeHolder: 'Pilih File',
     style: { objectFit: "cover", height: '200px' },
+    idPrewiev: 'exampleInputFile',
 };
 
 export default InputFile;

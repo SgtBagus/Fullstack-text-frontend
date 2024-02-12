@@ -45,3 +45,14 @@ export const TABEL_META = [
 		Cell: (val) => (<DateRender val={val} />)
   },
 ];
+
+export const USER_LIST  = [
+  {
+    value: 'admin',
+    option: 'ADMIN',
+  },
+  {
+    value: 'sales',
+    option: 'SALES',
+  },
+];

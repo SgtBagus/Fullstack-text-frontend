@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { NotificationManager } from "react-notifications";
+import Swal from 'sweetalert2';
 
 import { LoadingContext } from "../../Context/LoadingContext";
 import { ButtonContext } from "../../Context/ButtonContext";
@@ -7,13 +8,14 @@ import { ButtonContext } from "../../Context/ButtonContext";
 import Tabel from "../../Components/Tabel";
 import Loading from "../../Components/Loading";
 
-import FormReveralCode from "./Components/FormReveralCode";
+import Form from "./Components/Form";
 
 import { TABEL_META } from "./config";
 
-import { getUser } from "../../Data";
+import { getUser, getUserDelete } from "../../Data";
 
 import { CATCH_ERROR } from "../../Helper/Error";
+import { FORM_TYPES } from "../../Enum/Form";
 
 const Users = () => {
 	const [isLoading, setIsLoading] = useState(true);
@@ -49,7 +51,7 @@ const Users = () => {
       dataButtonList: [
         {
           id: 1,
-          customButton: <FormReveralCode />,
+          customButton: <Form />,
         },
       ],
     });
@@ -58,6 +60,54 @@ const Users = () => {
 
     dispatchLoading(false);
   }, [dispatch, dispatchLoading]);
+
+  const RenderEditForm = ({ data }) => {
+    const { id } = data; 
+    
+    return (
+      <Form
+        id={id}
+        buttonLabel=""
+        buttonIcon="fas fa-edit fa-xs"
+        form={data}
+        formType={FORM_TYPES.EDIT}
+        idModal={`editForm-${id}`}
+      />
+    )
+  }
+  
+  const confirmDeleteHandel = (data) => {
+    const { name, id } = data;
+
+    Swal.fire({
+        title: "Apakah anda yakin akan menghapus Data ini",
+        text: `Menghapus User - ${name}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Iya, Hapus data ini!",
+        showLoaderOnConfirm: true,
+        preConfirm: async () => {
+            try {
+                await getUserDelete(id);
+            } catch (error) {
+                Swal.showValidationMessage(`Request failed: ${error}`);
+            }
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Success",
+                text: "Berhasil Menghapus data, halaman ini akan di mulai ulang",
+                icon: "success"
+            });
+            
+            setTimeout(() => { window.location.reload() }, 3000);
+        }
+    });
+  }
 
   return (
     <div className="row">
@@ -75,15 +125,15 @@ const Users = () => {
             actionButton={{
               view: { enabled: false },
               edit: {
-                enabled: true,
-								onClick: (val) => {
-									console.log(val);
-								},
+                enabled: false,
+                customModal: (val) => (
+                    <RenderEditForm data={val} />
+                ),
               },
               delete: {
                 enabled: true,
 								onClick: (val) => {
-									console.log(val);
+                  confirmDeleteHandel(val);
 								},
               },
             }}
