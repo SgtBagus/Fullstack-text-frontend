@@ -1,4 +1,14 @@
+import { useContext, useEffect } from "react";
+
+import { LoadingContext } from "../Context/LoadingContext";
+
 const Dashboard = () => {
+    const { dispatchLoading } = useContext(LoadingContext);
+
+    useEffect(() => {
+      dispatchLoading(false);
+    }, [dispatchLoading]);
+
     return (
         <div className="container" style={{ marginTop: "120px" }}>
             <div className="row justify-content-center">

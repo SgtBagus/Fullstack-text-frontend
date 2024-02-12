@@ -6,7 +6,9 @@ import { AuthContext } from "../Context/AuthContext";
 import { LayoutDefault } from "../Layouts";
 
 import Login from "../Pages/Auth/Login";
+
 import Dashboard from "../Pages/Dashboard";
+import Customers from "../Pages/Customers";
 import Users from "../Pages/Users";
 
 const RoutesComponents = () => {
@@ -35,6 +37,14 @@ const RoutesComponents = () => {
         element={
           <ProtectedRoute>
             {RenderDefaultLayout(<Dashboard />, "Dashboard", "/")}
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/customer-list"
+        element={
+          <ProtectedRoute>
+            {RenderDefaultLayout(<Customers />, "Data Sales List", "/customer-list")}
           </ProtectedRoute>
         }
       />
