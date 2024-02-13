@@ -9,7 +9,7 @@ import Form from "./Components/Form";
 
 import { TABEL_META } from "./config";
 
-import { getCusomer, getCusomerDelete, getCustomerUpdateStatus, getPackage } from "../../Data";
+import { getCusomer, getCusomerDelete, getCustomerUpdateStatus, getActivePackage } from "../../Data";
 
 import { CATCH_ERROR } from "../../Helper/Error";
 import { FORM_TYPES } from "../../Enum/Form";
@@ -77,7 +77,7 @@ class Customers extends Component {
       const { buttonHeader: { dispatch }, loadingParam: { dispatchLoading } } = this.props;
 
       try {
-        const { data: coloumnData } = await getPackage();
+        const { data: coloumnData } = await getActivePackage();
 
         const getPakageList = coloumnData.map(x => ({ value: x.id, option: x.name }))
         this.setState({
@@ -90,7 +90,7 @@ class Customers extends Component {
           dataButtonList: [
             {
               id: 1,
-              customButton: <Form dataPackageList={getPakageList} />,
+              customButton: <Form buttonLabel="Tambah Data" formName="Data" dataPackageList={getPakageList} />,
             },
           ],
         });
@@ -142,6 +142,7 @@ class Customers extends Component {
         <Form
           id={id}
           buttonLabel=""
+          formName="Data"
           buttonIcon="fas fa-edit fa-xs"
           form={data}
           dataPackageList={getPakageList}

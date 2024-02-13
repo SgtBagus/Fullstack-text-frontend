@@ -10,6 +10,7 @@ import Login from "../Pages/Auth/Login";
 import Dashboard from "../Pages/Dashboard";
 import Customers from "../Pages/Customers";
 import Users from "../Pages/Users";
+import Packages from "../Pages/Packages";
 
 const RoutesComponents = () => {
   const { currentUser, isLoading } = useContext(AuthContext);
@@ -45,6 +46,14 @@ const RoutesComponents = () => {
         element={
           <ProtectedRoute>
             {RenderDefaultLayout(<Customers />, "Data Sales List", "/customer-list")}
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/package-list"
+        element={
+          <ProtectedRoute>
+            {RenderDefaultLayout(<Packages />, "Packages List", "/package-list")}
           </ProtectedRoute>
         }
       />

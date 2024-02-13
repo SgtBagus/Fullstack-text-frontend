@@ -1,13 +1,19 @@
 import { useContext, useEffect } from "react";
 
 import { LoadingContext } from "../Context/LoadingContext";
+import { ButtonContext } from "../Context/ButtonContext";
 
 const Dashboard = () => {
     const { dispatchLoading } = useContext(LoadingContext);
+    const { dispatch } = useContext(ButtonContext);
 
     useEffect(() => {
       dispatchLoading(false);
-    }, [dispatchLoading]);
+      dispatch({
+        typeSwtich: "CHANGE_BUTTON",
+        dataButtonList: [],
+      });
+    }, [dispatch, dispatchLoading]);
 
     return (
         <div className="container" style={{ marginTop: "120px" }}>

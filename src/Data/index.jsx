@@ -22,6 +22,7 @@ const endPoints = {
     // <======================>
     
     getPackage: 'api/package',
+    getActivePackage: 'api/activePackage',
 
     getPackageCreate: 'api/package/create',
     getPackageUpdate: 'api/package/update',
@@ -43,6 +44,7 @@ export const getCusomerDelete = id => fetchApi(`${endPoints.getCusomerDelete}/${
 
 
 export const getPackage = payload => fetchApi(endPoints.getPackage, payload);
+export const getActivePackage = payload => fetchApi(endPoints.getActivePackage, payload);
 export const getPackageCreate = payload => fetchApi(endPoints.getPackageCreate, payload, 'post');
 export const getPackageUpdate = (payload, id) => fetchApi(`${endPoints.getPackageUpdate}/${id}`, payload, 'post');
 export const getPackageDelete = id => fetchApi(`${endPoints.getPackageDelete}/${id}`, {}, 'delete');

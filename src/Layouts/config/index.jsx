@@ -40,7 +40,7 @@ export const MENU_LIST_SALES = [
     {
         id: 2,
         menuName: 'Data Sales List',
-        path: '/data-list',
+        path: '/customer-list',
         icon: 'nav-icon fas fa-table',
     },
 ]

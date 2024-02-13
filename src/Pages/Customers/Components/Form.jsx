@@ -233,7 +233,7 @@ class FormReveralCode extends Component {
             },
             onSend,
         } = this.state;
-        const { idModal, onClick, buttonLabel, buttonIcon, formType, dataPackageList, dataLogin: { role }} = this.props;
+        const { idModal, onClick, buttonLabel, formName, buttonIcon, formType, dataPackageList, dataLogin: { role }} = this.props;
 
         return (
             <Modals
@@ -251,7 +251,7 @@ class FormReveralCode extends Component {
             >
                 <div className="row">
                     <div className="col-md-12 my-2">
-                        <h3> Form User </h3>
+                        <h3> Form {formName} </h3>
                         <hr />
                         <FormValidation ref={(c) => { this.form = c; }}>
                             <div className="d-flex flex-column mb-2">
@@ -443,6 +443,7 @@ FormReveralCode.propTypes = {
     idModal: PropTypes.string,
     onClick: PropTypes.func,
     buttonLabel: PropTypes.string,
+    formName: PropTypes.string,
     buttonIcon: PropTypes.string,
     dataPackageList: PropTypes.array,
 };
@@ -453,6 +454,7 @@ FormReveralCode.defaultProps = {
     idModal: 'id-create',
     onClick: () => {},
     buttonLabel: 'Tamabh User',
+    formName: 'User',
     buttonIcon: "fas fa-plus mx-2",
     dataPackageList: [],
 };
