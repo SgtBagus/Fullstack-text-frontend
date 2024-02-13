@@ -1,70 +1,63 @@
-# Getting Started with Create React App
+Tentu, berikut adalah contoh cara instalasi React.js dalam file README.md di GitHub dengan langkah-langkah yang telah Anda sebutkan:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```markdown
+# Nama Proyek
 
-## Available Scripts
+Deskripsi singkat tentang proyek ini.
 
-In the project directory, you can run:
+## Instalasi
 
-### `npm start`
+Berikut adalah langkah-langkah instalasi untuk menjalankan proyek ini secara lokal.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Clone repositori ke mesin lokal Anda.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+git clone https://github.com/namauser/namarepo.git
+```
 
-### `npm test`
+2. Pindah ke direktori proyek.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+cd namarepo
+```
 
-### `npm run build`
+3. Install dependensi menggunakan npm.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Konfigurasi BASE_URL di file `src/Data/config/apiBase.jsx` dengan URL server backend.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```jsx
+// src/Data/config/apiBase.jsx
 
-### `npm run eject`
+const API_BASE_URL = 'http://localhost:5000'; // Ganti dengan URL backend Anda
+export default API_BASE_URL;
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+5. Jalankan aplikasi menggunakan npm.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Aplikasi sekarang dapat diakses melalui `http://localhost:3000` atau port lain yang mungkin digunakan oleh React secara default.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Penggunaan
 
-## Learn More
+Untuk masuk, gunakan kredensial berikut:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Admin: admin@admin.com, password: 12345678
+- Sales: sales@sales.com, password: 12345678
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Pastikan untuk menggunakan kredensial yang sesuai dengan peran yang ingin Anda uji.
 
-### Code Splitting
+## Kontribusi
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Jika Anda ingin berkontribusi pada proyek ini, silakan buka *issue* atau buat *pull request*. Kami sangat menghargai kontribusi Anda.
 
-### Analyzing the Bundle Size
+Terima kasih telah menggunakan proyek ini!
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Pastikan untuk mengganti URL backend dan kredensial login dengan informasi yang benar sesuai dengan proyek Anda. Selain itu, pastikan untuk memberikan informasi tambahan atau instruksi yang diperlukan untuk menjalankan proyek dengan sukses.
