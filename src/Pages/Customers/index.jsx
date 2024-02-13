@@ -9,7 +9,7 @@ import Form from "./Components/Form";
 
 import { TABEL_META } from "./config";
 
-import { getCusomer, getCusomerDelete, getPackage } from "../../Data";
+import { getCusomer, getCusomerDelete, getCustomerUpdateStatus, getPackage } from "../../Data";
 
 import { CATCH_ERROR } from "../../Helper/Error";
 import { FORM_TYPES } from "../../Enum/Form";
@@ -21,12 +21,10 @@ class Customers extends Component {
         super(props);
     
         this.state = {
-          dataMeta: {        
-            tabelHead: TABEL_META,
-            coloumnData: [],
-          },
+          coloumnData: [],
           getPakageList: [],
           isLoading: true,
+          onSend: false,
         };
     }
 
@@ -40,14 +38,39 @@ class Customers extends Component {
         const { data: coloumnData } = await getCusomer();
 
         this.setState({
-          dataMeta: {
-            tabelHead: TABEL_META,
-            coloumnData,
-          },
+          coloumnData,
         })
       } catch (err) {
         NotificationManager.warning(CATCH_ERROR(err), "Terjadi Kesalahan", 5000);
       }
+    }
+
+    changeStatus = (id, customerStatus) => {
+      this.setState({
+        onSend: true,
+      }, async () => {
+        try {
+          const payload = {
+            status: customerStatus === 'true' ? 'false' : 'true',
+          };
+  
+          await getCustomerUpdateStatus(payload, id);
+  
+          this.setState({
+            onSend: false,
+          }, () => {
+            NotificationManager.success('Data Telah Tersimpan! ', 'Success', 3000);
+
+            this.getCustomerData();
+          })
+        } catch (error) {
+          this.setState({
+            onSend: false,
+          }, () => {
+            NotificationManager.warning(CATCH_ERROR(error), "Terjadi Kesalahan", 5000);
+          })
+        }
+      })
     }
 
     getPakageList = async () => {
@@ -106,7 +129,7 @@ class Customers extends Component {
                   icon: "success"
               });
               
-              setTimeout(() => { window.location.reload() }, 3000);
+              this.getCustomerData();
           }
       });
     }
@@ -129,8 +152,9 @@ class Customers extends Component {
     }
     
     render() {
+      const { dataLogin: { role } } = this.props;
         const {
-          isLoading, dataMeta,
+          isLoading, coloumnData, onSend,
         } = this.state;
 
         return (  
@@ -145,7 +169,10 @@ class Customers extends Component {
               ) : (
                 <Tabel
                   title="Data Sales List"
-                  dataMeta={dataMeta}
+                  dataMeta={{     
+                    tabelHead: TABEL_META(onSend, role, this.changeStatus),
+                    coloumnData,
+                  }}
                   actionButton={{
                     view: { enabled: false },
                     edit: {

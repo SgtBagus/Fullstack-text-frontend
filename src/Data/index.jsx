@@ -14,6 +14,7 @@ const endPoints = {
 
     getCustomerCreate: 'api/customer/create',
     getCustomerUpdate: 'api/customer/update',
+    getCustomerUpdateStatus: 'api/customer/updatestatus',
     
     getCusomerDelete: 'api/customer/delete',
 
@@ -31,6 +32,7 @@ const endPoints = {
 export const getUser = payload => fetchApi(endPoints.getUser, payload);
 export const getUserCreate = payload => fetchApi(endPoints.getUserCreate, payload, 'post');
 export const getUserUpdate = (payload, id) => fetchApi(`${endPoints.getUserUpdate}/${id}`, payload, 'post');
+export const getCustomerUpdateStatus = (payload, id) => fetchApi(`${endPoints.getCustomerUpdateStatus}/${id}`, payload, 'post');
 export const getUserDelete = id => fetchApi(`${endPoints.getUserDelete}/${id}`, {}, 'delete');
 
 

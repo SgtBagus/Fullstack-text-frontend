@@ -16,13 +16,15 @@ import InputFile from "../../../Components/Form/InputFile";
 import { withHocks } from '../../../Context/WithParams';
 
 import {
-    getUserCreate, getUserUpdate,
+    getCustomerCreate, getCustomerUpdate,
 } from "../../../Data";
 import { UPLOAD_IMAGE } from "../../../Data/UploadImage";
 
 import { CATCH_ERROR, GENERATE_ERROR_MESSAGE } from "../../../Helper/Error";
 
 import { FORM_TYPES } from "../../../Enum/Form";
+import { ROLE_TYPES } from "../../../Enum/Role";
+import { STATUS_LIST } from "../config";
 
 
 class FormReveralCode extends Component {
@@ -35,12 +37,13 @@ class FormReveralCode extends Component {
                 name: '',
                 phone: '',
                 address: '',
-                status: '',
-                packageId: '',
+                status: 'true',
+                packageId: '1',
                 ktpImage: '',
                 houseImage: '',
             },
-            changeImage: false,
+            changeImageKTP: false,
+            changeImageHouse: false,
             loading: true,
             onSend: false,
             isFormSubmitted: false,
@@ -125,8 +128,8 @@ class FormReveralCode extends Component {
                 name: '',
                 phone: '',
                 address: '',
-                status: '',
-                packageId: '',
+                status: 'true',
+                packageId: '1',
                 ktpImage: '',
                 houseImage: '',
             },
@@ -135,21 +138,31 @@ class FormReveralCode extends Component {
     }
 
     handleSubmit = async () => {
-        const { form, changeImage } = this.state;
+        const { formType } = this.props;
+
+        const { form, changeImageKTP, changeImageHouse,  } = this.state;
         const { name, ktpImage, houseImage } = form;
 
         try {
-            if (changeImage) {
-                try {
+            if (FORM_TYPES.CREATE === formType) {
+                if (ktpImage === '' && houseImage === '') throw new Error ('Gambar Harus di-isi!');
+
+                const { data: { image_url: imageURLKTP } } = await UPLOAD_IMAGE(ktpImage, `customers/${name}`);
+                const { data: { image_url: imageURLHouse } } = await UPLOAD_IMAGE(houseImage, `customers/${name}`);
+
+                this.sendData(form, imageURLKTP, imageURLHouse);
+            } else {
+                if (changeImageKTP) {
                     const { data: { image_url: imageURLKTP } } = await UPLOAD_IMAGE(ktpImage, `customers/${name}`);
+    
+                    this.sendData(form, imageURLKTP, houseImage);
+                } else if (changeImageHouse) {
                     const { data: { image_url: imageURLHouse } } = await UPLOAD_IMAGE(houseImage, `customers/${name}`);
 
-                    this.sendData(form, imageURLKTP, imageURLHouse);
-                } catch (error) {
-                    NotificationManager.warning(CATCH_ERROR(error), "Terjadi Kesalahan", 5000);
+                    this.sendData(form, ktpImage, imageURLHouse);
+                } else {
+                    this.sendData(form, ktpImage, houseImage );
                 }
-            } else {
-                this.sendData(form, ktpImage, houseImage );
             }
         } catch (error) {
             this.setState({
@@ -161,7 +174,7 @@ class FormReveralCode extends Component {
     }
 
     sendData = async (data, urlImageKTP = null, urlImageHouse = null) => {
-        const { formType, dataLogin: { id: idLogin } } = this.props;
+        const { formType, dataLogin: { id: idLogin, role } } = this.props;
 
         const {
             id, name, phone, address, status, packageId,
@@ -171,16 +184,18 @@ class FormReveralCode extends Component {
             name: name,
             phone: phone,
             address: address,
-            status: status,
+            status: role === ROLE_TYPES.ADMIN ? status : 'false',
             package_id: packageId,
             ktpImage: urlImageKTP,
             houseImage: urlImageHouse,
             created_by: idLogin,
         }
 
+        console.log(payload);
+
         if (formType === FORM_TYPES.CREATE) {
             try {
-                await getUserCreate(payload);
+                await getCustomerCreate(payload);
 
                 NotificationManager.success('Data Telah Tersimpan!, halaman ini akan segera di refresh', 'Success', 3000);
                 setTimeout(() => { window.location.reload() }, 3000);
@@ -193,7 +208,7 @@ class FormReveralCode extends Component {
             }
         } else {
             try {
-                await getUserUpdate(payload, id);
+                await getCustomerUpdate(payload, id);
     
                 NotificationManager.success('Data Telah Diupdate!, halaman ini akan segera di refresh', 'Success', 3000);
                 setTimeout(() => { window.location.reload() }, 3000);
@@ -214,10 +229,11 @@ class FormReveralCode extends Component {
                 id, name, phone,
                 address, packageId,
                 ktpImage, houseImage,
+                status,
             },
             onSend,
         } = this.state;
-        const { idModal, onClick, buttonLabel, buttonIcon, formType, dataPackageList } = this.props;
+        const { idModal, onClick, buttonLabel, buttonIcon, formType, dataPackageList, dataLogin: { role }} = this.props;
 
         return (
             <Modals
@@ -305,6 +321,7 @@ class FormReveralCode extends Component {
                                                     placeholder="Alamat"
                                                     changeEvent={(val, e) => this._changeInputHandler('address', val, e)}
                                                     row="4"
+                                                    required
                                                 />
                                             </div>
                                         </div>
@@ -350,7 +367,7 @@ class FormReveralCode extends Component {
                                                     style={{ objectFit: 'contain', height: '325px' }}
                                                     changeEvent={(val, e) => {
                                                         this.setState({
-                                                            changeImage: true,
+                                                            changeImageKTP: true,
                                                         }, () => {
                                                             this._changeInputHandler('ktpImage', val, e)
                                                         })
@@ -376,7 +393,7 @@ class FormReveralCode extends Component {
                                                     style={{ objectFit: 'contain', height: '325px' }}
                                                     changeEvent={(val, e) => {
                                                         this.setState({
-                                                            changeImage: true,
+                                                            changeImageHouse: true,
                                                         }, () => {
                                                             this._changeInputHandler('houseImage', val, e)
                                                         })
@@ -390,6 +407,28 @@ class FormReveralCode extends Component {
                                     </div>
                                 </div>
                             </div>
+                            {
+                                role === ROLE_TYPES.ADMIN && (
+                                    <div className="d-flex flex-column mb-2">
+                                        <label className="control-label">
+                                            Status Aktif
+                                            {' '}
+                                        <span className="text-red"> * </span>
+                                        </label>
+                                        <div className="row">
+                                            <div className="col-md-12">
+                                                <InputSelect
+                                                    data={STATUS_LIST}
+                                                    value={status}
+                                                    changeEvent={(val, e) => this._changeInputHandler('status', val, e)}
+                                                    placeholder="Pilih Status Customer"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            }
                         </FormValidation>
                     </div>
                 </div>
